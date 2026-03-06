@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Track Your Paket</title>
+</head>
+<body>
+
+<h2>GOO!!!</h2>
+<button onclick="getLocation()">Share Location</button>
+
+<script>
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      alert("Latitude: " + position.coords.latitude +
+      " Longitude: " + position.coords.longitude);
+    });
+  } else {
+    alert("Geolocation not supported");
+  }
+}
+</script>
+
+</body>
+</html>
